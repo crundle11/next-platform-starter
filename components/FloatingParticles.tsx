@@ -29,10 +29,14 @@ export default function FloatingParticles() {
       speedY: number
       opacity: number
       color: string
+      canvasWidth: number
+      canvasHeight: number
 
-      constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+      constructor(width: number, height: number) {
+        this.canvasWidth = width
+        this.canvasHeight = height
+        this.x = Math.random() * width
+        this.y = Math.random() * height
         this.size = Math.random() * 2 + 0.5
         this.speedX = (Math.random() - 0.5) * 0.3
         this.speedY = (Math.random() - 0.5) * 0.3
@@ -48,10 +52,10 @@ export default function FloatingParticles() {
         this.y += this.speedY
 
         // Wrap around screen
-        if (this.x > canvas.width) this.x = 0
-        if (this.x < 0) this.x = canvas.width
-        if (this.y > canvas.height) this.y = 0
-        if (this.y < 0) this.y = canvas.height
+        if (this.x > this.canvasWidth) this.x = 0
+        if (this.x < 0) this.x = this.canvasWidth
+        if (this.y > this.canvasHeight) this.y = 0
+        if (this.y < 0) this.y = this.canvasHeight
       }
 
       draw() {
@@ -70,7 +74,7 @@ export default function FloatingParticles() {
     const particleCount = 50
 
     for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle())
+      particles.push(new Particle(canvas.width, canvas.height))
     }
 
     // Animation loop
