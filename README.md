@@ -8,14 +8,27 @@ USRR is a narrative-driven digital asset reflecting market sentiment around the 
 
 ## Features
 
+- 🎬 **Premium Intro Sequence** - Cinematic entry experience with February 16th narrative framing
 - ✨ Premium institutional design with subtle animations
 - 🎨 Custom gradient backgrounds with grain texture overlay
 - 📱 Fully responsive design
 - ⚡ Built on Next.js 14 with TypeScript
 - 🎯 Optimized for static export (Netlify deployment)
 - 🔒 Professional copy and disclaimers
+- 💾 Session storage to show intro only once per session
 
-## Required Sections (All Implemented)
+## Site Structure
+
+### Intro Sequence (New!)
+
+A premium, institutional entry experience that:
+- Displays sequential narrative copy about February 16th
+- Reveals the USRR gold coin with subtle metallic effects
+- Features an "Enter USRR" button to access the main site
+- Stores completion in sessionStorage (only shows once per session)
+- Can be reset by clearing browser session storage
+
+### Main Landing Page Sections
 
 1. **Hero Section** - USRR seal, headline, February 16th reference
 2. **February 16th Market Signal** - Handshake image and narrative

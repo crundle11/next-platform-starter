@@ -1,12 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Copy, Check, ExternalLink, Send, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
+import IntroSequence from '@/components/IntroSequence'
 
 export default function Home() {
+  const [showIntro, setShowIntro] = useState(true)
+  const [introComplete, setIntroComplete] = useState(false)
   const [copied, setCopied] = useState(false)
   const contractAddress = 'XXXX...XXXX' // Placeholder
+
+  // Check if user has already seen intro in this session
+  useEffect(() => {
+    const hasSeenIntro = sessionStorage.getItem('usrr_intro_complete')
+    if (hasSeenIntro === 'true') {
+      setShowIntro(false)
+      setIntroComplete(true)
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem('usrr_intro_complete', 'true')
+    setShowIntro(false)
+    // Small delay for smooth transition
+    setTimeout(() => setIntroComplete(true), 300)
+  }
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(contractAddress)
@@ -15,7 +34,16 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white overflow-x-hidden">
+    <>
+      {/* Intro Sequence */}
+      {showIntro && <IntroSequence onComplete={handleIntroComplete} />}
+
+      {/* Main Site - Fade in after intro */}
+      <main 
+        className={`min-h-screen bg-black text-white overflow-x-hidden transition-opacity duration-700 ${
+          introComplete ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
       {/* Background Design */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
@@ -430,5 +458,6 @@ export default function Home() {
         </footer>
       </div>
     </main>
+    </>
   )
 }
