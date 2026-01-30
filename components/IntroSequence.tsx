@@ -43,6 +43,7 @@ export default function IntroSequence({ onComplete, onTransitionStart }: IntroSe
     }, timings[stage])
 
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage])
 
   return (

@@ -284,7 +284,7 @@ export default function Home() {
                 </h2>
                 <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
                   <p>
-                    USRR represents the market's anticipation of a new era in U.S. financial infrastructure. With growing signals around institutional adoption and increasing discussion of XRP integration into traditional banking and settlement systems, USRR captures the narrative of a Ripple-aligned reserve asset.
+                    USRR represents the market&apos;s anticipation of a new era in U.S. financial infrastructure. With growing signals around institutional adoption and increasing discussion of XRP integration into traditional banking and settlement systems, USRR captures the narrative of a Ripple-aligned reserve asset.
                   </p>
                   <p>
                     Built for institutional adoption, liquidity efficiency, and on-chain transparency, USRR is positioned at the intersection of crypto and legacy finance.
