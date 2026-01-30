@@ -29,13 +29,16 @@ export default function IntroSequence({ onComplete, onTransitionStart }: IntroSe
       800,   // Line 2: FEBRUARY 16TH
       800,   // Line 3: A shift in financial narrative begins
       1200,  // Coin reveal
-      1000,  // Narrative bridge
-      0      // Button reveal
+      1500,  // Narrative bridge
+      2000   // Auto-advance to main site
     ]
 
     const timer = setTimeout(() => {
       if (stage < 6) {
         setStage(stage + 1)
+      } else {
+        // Auto-advance to main site
+        handleEnter()
       }
     }, timings[stage])
 
@@ -159,22 +162,19 @@ export default function IntroSequence({ onComplete, onTransitionStart }: IntroSe
           </p>
         </div>
 
-        {/* Enter Button */}
+        {/* Loading indicator */}
         <div
-          className={`transition-all duration-1000 pt-4 ${
-            stage >= 6
+          className={`transition-all duration-1000 pt-8 ${
+            stage >= 5
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-4'
           }`}
         >
-          <button
-            onClick={handleEnter}
-            className="group relative px-12 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-black font-mono font-semibold text-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gold-500/50 hover:scale-105"
-          >
-            {/* Button shine effect on hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            <span className="relative">Enter USRR</span>
-          </button>
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-gold-500 animate-pulse" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 rounded-full bg-gold-500 animate-pulse" style={{ animationDelay: '200ms' }} />
+            <div className="w-2 h-2 rounded-full bg-gold-500 animate-pulse" style={{ animationDelay: '400ms' }} />
+          </div>
         </div>
       </div>
     </div>

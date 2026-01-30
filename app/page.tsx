@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Copy, Check, ExternalLink, Send, ShoppingCart } from 'lucide-react'
+import { Copy, Check, ExternalLink, Send, ShoppingCart, Zap, Shield, TrendingUp } from 'lucide-react'
 import Image from 'next/image'
 import IntroSequence from '@/components/IntroSequence'
+import FloatingParticles from '@/components/FloatingParticles'
+import LivePriceSimulator from '@/components/LivePriceSimulator'
 
 export default function Home() {
   const [showIntro, setShowIntro] = useState(true)
@@ -11,14 +13,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false)
   const contractAddress = 'XXXX...XXXX' // Placeholder
 
-  // Check if user has already seen intro in this session
-  useEffect(() => {
-    const hasSeenIntro = sessionStorage.getItem('usrr_intro_complete')
-    if (hasSeenIntro === 'true') {
-      setShowIntro(false)
-      setIntroComplete(true)
-    }
-  }, [])
+  // Intro shows every time - no session storage check
 
   const handleIntroTransitionStart = () => {
     // Start showing main page with coin already visible
@@ -26,7 +21,6 @@ export default function Home() {
   }
 
   const handleIntroComplete = () => {
-    sessionStorage.setItem('usrr_intro_complete', 'true')
     setTimeout(() => {
       setShowIntro(false)
     }, 500)
@@ -54,6 +48,9 @@ export default function Home() {
           introComplete ? 'opacity-100' : 'opacity-0'
         }`}
       >
+      {/* Floating Particles */}
+      <FloatingParticles />
+
       {/* Background Design */}
       <div className="fixed inset-0 z-0">
         {/* Base gradient */}
@@ -86,17 +83,18 @@ export default function Home() {
           <div className="max-w-6xl mx-auto text-center space-y-12 animate-fade-in">
             {/* USRR Seal - Primary Brand Mark */}
             <div className="flex justify-center mb-8">
-              <div className="relative w-72 h-72 md:w-96 md:h-96 animate-glow group">
+              <div className="relative w-72 h-72 md:w-96 md:h-96 animate-float group">
+                <div className="absolute inset-0 animate-pulse-glow rounded-full" />
                 <Image
                   src="/coin.png"
                   alt="USRR Seal"
                   width={384}
                   height={384}
-                  className="drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
+                  className="drop-shadow-2xl transition-transform duration-700 group-hover:scale-105 relative z-10"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-radial from-gold-500/20 to-transparent blur-xl -z-10" />
-                <div className="absolute inset-0 bg-gradient-radial from-gold-400/30 via-transparent to-transparent blur-2xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-gradient-radial from-gold-500/20 to-transparent blur-xl" />
+                <div className="absolute inset-0 bg-gradient-radial from-gold-400/30 via-transparent to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               </div>
             </div>
 
@@ -110,6 +108,11 @@ export default function Home() {
                   USRR
                 </span>
               </div>
+            </div>
+
+            {/* Live Price Simulator */}
+            <div className="flex justify-center mb-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <LivePriceSimulator />
             </div>
 
             {/* Subheading */}
@@ -215,6 +218,61 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Stats Bar */}
+        <section className="py-12 px-6 border-y border-gray-800/50 bg-gray-950/30 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div className="space-y-2 group cursor-pointer">
+                <div className="flex justify-center mb-2">
+                  <Zap className="text-gold-400 group-hover:text-gold-300 transition-colors" size={24} />
+                </div>
+                <div className="text-3xl font-display font-bold text-white group-hover:text-gold-400 transition-colors">
+                  <span className="font-mono">24/7</span>
+                </div>
+                <div className="text-sm text-gray-400">
+                  Trading Active
+                </div>
+              </div>
+
+              <div className="space-y-2 group cursor-pointer">
+                <div className="flex justify-center mb-2">
+                  <Shield className="text-gold-400 group-hover:text-gold-300 transition-colors" size={24} />
+                </div>
+                <div className="text-3xl font-display font-bold text-white group-hover:text-gold-400 transition-colors">
+                  <span className="font-mono">100%</span>
+                </div>
+                <div className="text-sm text-gray-400">
+                  Community Driven
+                </div>
+              </div>
+
+              <div className="space-y-2 group cursor-pointer">
+                <div className="flex justify-center mb-2">
+                  <TrendingUp className="text-gold-400 group-hover:text-gold-300 transition-colors" size={24} />
+                </div>
+                <div className="text-3xl font-display font-bold text-white group-hover:text-gold-400 transition-colors">
+                  <span className="font-mono">∞</span>
+                </div>
+                <div className="text-sm text-gray-400">
+                  Market Potential
+                </div>
+              </div>
+
+              <div className="space-y-2 group cursor-pointer">
+                <div className="flex justify-center mb-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 animate-pulse" />
+                </div>
+                <div className="text-3xl font-display font-bold text-white group-hover:text-gold-400 transition-colors">
+                  <span className="font-mono">LIVE</span>
+                </div>
+                <div className="text-sm text-gray-400">
+                  On Solana
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* About / Narrative Section */}
         <section className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
@@ -304,8 +362,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-12 p-6 border border-red-600/20 bg-red-950/10 rounded-lg">
-              <p className="text-center text-gray-300 leading-relaxed">
+            <div className="mt-12 p-6 border border-red-600/20 bg-red-950/10 rounded-lg relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+              <p className="text-center text-gray-300 leading-relaxed relative z-10">
                 <span className="font-semibold text-red-400">Disclaimer:</span> USRR is a speculative narrative token with no intrinsic value, no roadmap, and no promises. This is not financial advice. Do not invest more than you can afford to lose.
               </p>
             </div>
