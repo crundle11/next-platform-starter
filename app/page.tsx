@@ -11,7 +11,7 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(true)
   const [introComplete, setIntroComplete] = useState(false)
   const [copied, setCopied] = useState(false)
-  const contractAddress = 'XXXX...XXXX' // Placeholder
+  const contractAddress = 'BAxDvA2EXe1WTuceGjK1PdsPtPPG9G2XzXvCZ2g1mjg7'
 
   // Intro shows every time - no session storage check
 
@@ -496,22 +496,13 @@ export default function Home() {
                   <ExternalLink size={18} className="text-gray-400" />
                 </div>
                 
-                {/* Placeholder content */}
-                <div className="aspect-video flex items-center justify-center p-12">
-                  <div className="text-center space-y-4">
-                    <div className="text-6xl text-gray-700">📊</div>
-                    <p className="text-gray-400 text-lg">
-                      DexScreener embed will appear here upon contract deployment
-                    </p>
-                    <a
-                      href="https://dexscreener.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block px-6 py-2 border border-gray-600 hover:border-gold-600 text-gray-300 hover:text-gold-400 rounded transition-colors"
-                    >
-                      Visit DexScreener
-                    </a>
-                  </div>
+                {/* DexScreener Embed */}
+                <div className="aspect-video">
+                  <iframe
+                    src={`https://dexscreener.com/solana/${contractAddress}?embed=1&theme=dark&trades=0&info=0`}
+                    className="w-full h-full rounded"
+                    title="DexScreener Trading Chart"
+                  />
                 </div>
               </div>
             </div>
