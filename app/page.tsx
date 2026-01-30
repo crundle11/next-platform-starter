@@ -20,11 +20,16 @@ export default function Home() {
     }
   }, [])
 
+  const handleIntroTransitionStart = () => {
+    // Start showing main page with coin already visible
+    setTimeout(() => setIntroComplete(true), 100)
+  }
+
   const handleIntroComplete = () => {
     sessionStorage.setItem('usrr_intro_complete', 'true')
-    setShowIntro(false)
-    // Small delay for smooth transition
-    setTimeout(() => setIntroComplete(true), 300)
+    setTimeout(() => {
+      setShowIntro(false)
+    }, 500)
   }
 
   const copyToClipboard = () => {
@@ -36,7 +41,12 @@ export default function Home() {
   return (
     <>
       {/* Intro Sequence */}
-      {showIntro && <IntroSequence onComplete={handleIntroComplete} />}
+      {showIntro && (
+        <IntroSequence 
+          onComplete={handleIntroComplete}
+          onTransitionStart={handleIntroTransitionStart}
+        />
+      )}
 
       {/* Main Site - Fade in after intro */}
       <main 
@@ -46,10 +56,26 @@ export default function Home() {
       >
       {/* Background Design */}
       <div className="fixed inset-0 z-0">
+        {/* Base gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
-        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-radial from-gold-900/10 via-transparent to-transparent blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-red-900/10 via-transparent to-transparent blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-radial from-navy-900/5 via-transparent to-transparent blur-3xl" />
+        
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gold-950/20 via-transparent to-red-950/10 animate-gradient opacity-50" />
+        
+        {/* Multiple light sources */}
+        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-radial from-gold-900/15 via-gold-950/5 to-transparent blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-gradient-radial from-red-900/10 via-transparent to-transparent blur-3xl" />
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-radial from-gold-800/10 via-transparent to-transparent blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-blue-900/5 via-transparent to-transparent blur-3xl" />
+        
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `linear-gradient(rgba(234, 179, 8, 0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(234, 179, 8, 0.1) 1px, transparent 1px)`,
+          backgroundSize: '100px 100px'
+        }} />
+        
+        {/* Grain texture */}
         <div className="grain-overlay absolute inset-0" />
       </div>
 
@@ -60,26 +86,27 @@ export default function Home() {
           <div className="max-w-6xl mx-auto text-center space-y-12 animate-fade-in">
             {/* USRR Seal - Primary Brand Mark */}
             <div className="flex justify-center mb-8">
-              <div className="relative w-72 h-72 md:w-96 md:h-96 animate-glow">
+              <div className="relative w-72 h-72 md:w-96 md:h-96 animate-glow group">
                 <Image
                   src="/coin.png"
                   alt="USRR Seal"
                   width={384}
                   height={384}
-                  className="drop-shadow-2xl"
+                  className="drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-radial from-gold-500/20 to-transparent blur-xl -z-10" />
+                <div className="absolute inset-0 bg-gradient-radial from-gold-400/30 via-transparent to-transparent blur-2xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               </div>
             </div>
 
             {/* Headline */}
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+              <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight bg-gradient-to-b from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
                 United States Ripple Reserve
               </h1>
-              <div className="inline-block px-6 py-2 border border-gold-600/30 bg-gold-900/10 rounded-full">
-                <span className="text-2xl md:text-3xl font-semibold text-gold-400 tracking-wider">
+              <div className="inline-block px-6 py-2 border border-gold-600/30 bg-gold-900/10 rounded-full backdrop-blur-sm">
+                <span className="text-2xl md:text-3xl font-mono font-semibold text-gold-400 tracking-wider">
                   USRR
                 </span>
               </div>
@@ -90,7 +117,7 @@ export default function Home() {
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
                 A narrative-driven asset reflecting market anticipation of XRP integration into U.S. financial infrastructure.
               </p>
-              <p className="text-lg md:text-xl text-gold-400 font-medium">
+              <p className="text-lg md:text-xl text-gold-400 font-mono font-medium tracking-wide">
                 Market Signal: February 16th
               </p>
             </div>
@@ -102,7 +129,7 @@ export default function Home() {
                 href="https://t.me/YOUR_TELEGRAM_HANDLE"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-mono font-semibold rounded-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg hover:shadow-blue-500/50 hover:scale-105 border border-blue-400/20"
               >
                 <Send size={20} />
                 Join Telegram
@@ -116,7 +143,7 @@ export default function Home() {
                     e.preventDefault()
                     document.getElementById('how-to-buy')?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-black font-semibold rounded-lg hover:from-gold-500 hover:to-gold-400 transition-all duration-300 shadow-lg hover:shadow-gold-500/50 hover:scale-105"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-black font-mono font-semibold rounded-lg hover:from-gold-500 hover:to-gold-400 transition-all duration-300 shadow-lg hover:shadow-gold-500/50 hover:scale-105 border border-gold-400/30"
                 >
                   <ShoppingCart size={20} />
                   How to Buy
@@ -128,7 +155,7 @@ export default function Home() {
                     e.preventDefault()
                     document.getElementById('contract')?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className="inline-flex items-center gap-3 px-8 py-4 border-2 border-gold-600 text-gold-400 font-semibold rounded-lg hover:bg-gold-600 hover:text-black transition-all duration-300 shadow-lg hover:shadow-gold-500/50 hover:scale-105"
+                  className="inline-flex items-center gap-3 px-8 py-4 border-2 border-gold-600 text-gold-400 font-mono font-semibold rounded-lg hover:bg-gold-600 hover:text-black transition-all duration-300 shadow-lg hover:shadow-gold-500/50 hover:scale-105 backdrop-blur-sm"
                 >
                   View Contract
                 </a>
@@ -141,10 +168,10 @@ export default function Home() {
         <section className="py-24 px-6 bg-gradient-to-b from-transparent via-red-950/5 to-transparent">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gold-400">
+              <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500 bg-clip-text text-transparent">
                 February 16th
               </h2>
-              <p className="text-2xl md:text-3xl font-light text-gray-200">
+              <p className="text-2xl md:text-3xl font-mono font-light text-gray-200 tracking-wide">
                 Market Signal
               </p>
             </div>
@@ -152,22 +179,24 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Handshake Image - Institutional Visual */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/20 to-red-600/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                <div className="relative border border-gold-600/20 rounded-lg overflow-hidden bg-black/40 backdrop-blur-sm p-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/20 to-red-600/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                <div className="relative border border-gold-600/20 rounded-lg overflow-hidden bg-black/40 backdrop-blur-sm p-2 group-hover:border-gold-500/30 transition-all duration-500">
                   <Image
                     src="/handshake.jpeg"
                     alt="Institutional Convergence"
                     width={800}
                     height={600}
-                    className="w-full h-auto rounded grayscale-[30%] opacity-90"
+                    className="w-full h-auto rounded grayscale-[30%] opacity-90 group-hover:grayscale-[20%] group-hover:opacity-100 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  {/* Corner accent */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </div>
 
               {/* Signal Content */}
               <div className="space-y-6">
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-100">
+                <h3 className="text-2xl md:text-3xl font-display font-semibold text-gray-100">
                   Convergence Point
                 </h3>
                 <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
@@ -192,7 +221,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-16 items-center">
               {/* Narrative Content */}
               <div className="space-y-8">
-                <h2 className="text-4xl md:text-5xl font-bold">
+                <h2 className="text-4xl md:text-5xl font-display font-bold bg-gradient-to-br from-white to-gray-400 bg-clip-text text-transparent">
                   The Narrative
                 </h2>
                 <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
@@ -210,15 +239,17 @@ export default function Home() {
 
               {/* Coin Close-Up Image */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/30 to-gold-800/30 rounded-lg blur-2xl group-hover:blur-3xl transition-all duration-300" />
-                <div className="relative border border-gold-600/30 rounded-lg overflow-hidden bg-black/60 backdrop-blur-sm p-8">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/30 to-gold-800/30 rounded-lg blur-2xl group-hover:blur-3xl transition-all duration-500" />
+                <div className="relative border border-gold-600/30 rounded-lg overflow-hidden bg-black/60 backdrop-blur-sm p-8 group-hover:border-gold-500/50 transition-all duration-500">
                   <Image
                     src="/coin.png"
                     alt="USRR Token Detail"
                     width={500}
                     height={500}
-                    className="w-full h-auto drop-shadow-2xl"
+                    className="w-full h-auto drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
                   />
+                  {/* Shine effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 </div>
               </div>
             </div>
@@ -228,16 +259,16 @@ export default function Home() {
         {/* Token Information */}
         <section className="py-24 px-6 bg-gradient-to-b from-transparent via-gray-900/30 to-transparent">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-center mb-16 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
               Token Information
             </h2>
             
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="border border-gray-700 bg-gray-900/30 backdrop-blur-sm rounded-lg p-8 text-center space-y-4">
-                <div className="text-gold-400 text-sm font-semibold uppercase tracking-wider">
+              <div className="group border border-gray-700 bg-gray-900/30 backdrop-blur-sm rounded-lg p-8 text-center space-y-4 hover:border-gray-600 hover:bg-gray-900/50 transition-all duration-300">
+                <div className="text-gold-400 text-sm font-mono font-semibold uppercase tracking-wider">
                   Blockchain
                 </div>
-                <div className="text-3xl font-bold">
+                <div className="text-3xl font-display font-bold group-hover:text-gold-400 transition-colors duration-300">
                   Solana
                 </div>
                 <div className="text-gray-400 text-sm">
@@ -245,23 +276,26 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border border-gold-600/30 bg-gold-900/10 backdrop-blur-sm rounded-lg p-8 text-center space-y-4">
-                <div className="text-gold-400 text-sm font-semibold uppercase tracking-wider">
-                  Symbol
-                </div>
-                <div className="text-3xl font-bold text-gold-400">
-                  USRR
-                </div>
-                <div className="text-gray-400 text-sm">
-                  United States Ripple Reserve
+              <div className="group relative border border-gold-600/30 bg-gold-900/10 backdrop-blur-sm rounded-lg p-8 text-center space-y-4 hover:border-gold-500/50 hover:bg-gold-900/20 transition-all duration-300 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-500/0 to-gold-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="text-gold-400 text-sm font-mono font-semibold uppercase tracking-wider">
+                    Symbol
+                  </div>
+                  <div className="text-3xl font-display font-bold text-gold-400 group-hover:scale-110 transition-transform duration-300">
+                    USRR
+                  </div>
+                  <div className="text-gray-400 text-sm">
+                    United States Ripple Reserve
+                  </div>
                 </div>
               </div>
 
-              <div className="border border-gray-700 bg-gray-900/30 backdrop-blur-sm rounded-lg p-8 text-center space-y-4">
-                <div className="text-gold-400 text-sm font-semibold uppercase tracking-wider">
+              <div className="group border border-gray-700 bg-gray-900/30 backdrop-blur-sm rounded-lg p-8 text-center space-y-4 hover:border-gray-600 hover:bg-gray-900/50 transition-all duration-300">
+                <div className="text-gold-400 text-sm font-mono font-semibold uppercase tracking-wider">
                   Supply
                 </div>
-                <div className="text-3xl font-bold">
+                <div className="text-3xl font-display font-bold group-hover:text-gold-400 transition-colors duration-300">
                   TBD
                 </div>
                 <div className="text-gray-400 text-sm">
@@ -281,7 +315,7 @@ export default function Home() {
         {/* Contract Address */}
         <section id="contract" className="py-24 px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-center mb-12 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
               Contract Address
             </h2>
             
@@ -299,7 +333,7 @@ export default function Home() {
                   </div>
                   <button
                     onClick={copyToClipboard}
-                    className="flex items-center gap-2 px-6 py-3 bg-gold-600 hover:bg-gold-500 text-black font-semibold rounded-lg transition-all duration-300 whitespace-nowrap"
+                    className="flex items-center gap-2 px-6 py-3 bg-gold-600 hover:bg-gold-500 text-black font-mono font-semibold rounded-lg transition-all duration-300 whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-gold-500/50"
                   >
                     {copied ? (
                       <>
@@ -326,19 +360,19 @@ export default function Home() {
         {/* How to Buy */}
         <section id="how-to-buy" className="py-24 px-6 bg-gradient-to-b from-transparent via-gray-900/20 to-transparent">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-center mb-16 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
               How to Buy
             </h2>
             
             <div className="grid md:grid-cols-3 gap-8">
               {/* Step 1 */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full">
-                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-bold text-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full hover:border-gold-600/30 hover:bg-gray-900/70 transition-all duration-500">
+                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-mono font-bold text-xl group-hover:scale-110 group-hover:bg-gold-600/30 transition-all duration-300">
                     1
                   </div>
-                  <h3 className="text-2xl font-semibold">
+                  <h3 className="text-2xl font-display font-semibold">
                     Get a Solana Wallet
                   </h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -349,12 +383,12 @@ export default function Home() {
 
               {/* Step 2 */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full">
-                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-bold text-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full hover:border-gold-600/30 hover:bg-gray-900/70 transition-all duration-500">
+                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-mono font-bold text-xl group-hover:scale-110 group-hover:bg-gold-600/30 transition-all duration-300">
                     2
                   </div>
-                  <h3 className="text-2xl font-semibold">
+                  <h3 className="text-2xl font-display font-semibold">
                     Fund with SOL
                   </h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -365,12 +399,12 @@ export default function Home() {
 
               {/* Step 3 */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300" />
-                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full">
-                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-bold text-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold-600/10 to-transparent rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                <div className="relative border border-gray-700 bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 space-y-4 h-full hover:border-gold-600/30 hover:bg-gray-900/70 transition-all duration-500">
+                  <div className="w-12 h-12 rounded-full bg-gold-600/20 border border-gold-600/40 flex items-center justify-center text-gold-400 font-mono font-bold text-xl group-hover:scale-110 group-hover:bg-gold-600/30 transition-all duration-300">
                     3
                   </div>
-                  <h3 className="text-2xl font-semibold">
+                  <h3 className="text-2xl font-display font-semibold">
                     Swap for USRR
                   </h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -385,7 +419,7 @@ export default function Home() {
         {/* DexScreener Section */}
         <section className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-center mb-16 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
               Live Market Data
             </h2>
             
@@ -428,7 +462,7 @@ export default function Home() {
         {/* Official Bio Section */}
         <section className="py-24 px-6 bg-gradient-to-b from-transparent via-gray-900/30 to-transparent">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-center mb-12 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
               About USRR
             </h2>
             
@@ -444,7 +478,7 @@ export default function Home() {
         <footer className="py-16 px-6 border-t border-gray-800">
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-6">
-              <div className="text-2xl font-bold text-gold-400">
+              <div className="text-2xl font-mono font-bold text-gold-400">
                 USRR
               </div>
               <div className="text-sm text-gray-400 max-w-2xl mx-auto leading-relaxed">

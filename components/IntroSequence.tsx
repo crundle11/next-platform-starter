@@ -5,10 +5,22 @@ import Image from 'next/image'
 
 interface IntroSequenceProps {
   onComplete: () => void
+  onTransitionStart?: () => void
 }
 
-export default function IntroSequence({ onComplete }: IntroSequenceProps) {
+export default function IntroSequence({ onComplete, onTransitionStart }: IntroSequenceProps) {
   const [stage, setStage] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  const handleEnter = () => {
+    setIsTransitioning(true)
+    if (onTransitionStart) {
+      onTransitionStart()
+    }
+    setTimeout(() => {
+      onComplete()
+    }, 800)
+  }
 
   useEffect(() => {
     const timings = [
@@ -31,7 +43,9 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
   }, [stage])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-all duration-700 ${
+      isTransitioning ? 'opacity-0' : 'opacity-100'
+    }`}>
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-950">
         {/* Grain texture */}
@@ -62,7 +76,7 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
                 : 'opacity-0 translate-y-4'
             }`}
           >
-            <p className="text-gold-400 text-sm md:text-base font-semibold uppercase tracking-[0.3em] letter-spacing">
+            <p className="text-gold-400 text-sm md:text-base font-mono font-semibold uppercase tracking-[0.3em]">
               A Market Signal
             </p>
           </div>
@@ -75,7 +89,7 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
                 : 'opacity-0 translate-y-4'
             }`}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white tracking-tight">
               February 16th
             </h1>
           </div>
@@ -100,9 +114,11 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
             stage >= 4
               ? 'opacity-100 scale-100'
               : 'opacity-0 scale-95'
+          } ${
+            isTransitioning ? 'scale-90 translate-y-[-10vh]' : ''
           }`}
         >
-          <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80">
+          <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80" id="intro-coin">
             <Image
               src="/coin.png"
               alt="USRR"
@@ -152,8 +168,8 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
           }`}
         >
           <button
-            onClick={onComplete}
-            className="group relative px-12 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-black font-semibold text-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gold-500/50"
+            onClick={handleEnter}
+            className="group relative px-12 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-black font-mono font-semibold text-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gold-500/50 hover:scale-105"
           >
             {/* Button shine effect on hover */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />

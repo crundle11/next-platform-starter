@@ -7,6 +7,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-playfair)', 'serif'],
+        mono: ['var(--font-space)', 'monospace'],
+      },
       colors: {
         gold: {
           50: '#fefce8',
